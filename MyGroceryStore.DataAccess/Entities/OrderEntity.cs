@@ -7,6 +7,6 @@ namespace MyGroceryStore.DataAccess.Entities
         [Key]
         public int Id { get; set; }
         public CustomerEntity Customer { get; set; } = null!;
-        public ICollection<ProductEntity> Product { get; set; } = new List<ProductEntity>();
+        public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
     }
 }

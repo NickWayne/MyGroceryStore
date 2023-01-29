@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyGroceryStore.BusinessLogic.Interfaces;
+using MyGroceryStore.DataAccess.Entities;
 
 namespace MyGroceryStore.WebAPI.Controllers
 {
@@ -33,6 +35,7 @@ namespace MyGroceryStore.WebAPI.Controllers
 
         [HttpGet("{Id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetCustomerById(int Id)
@@ -42,6 +45,46 @@ namespace MyGroceryStore.WebAPI.Controllers
             try
             {
                 var result = _customerService.GetCustomererById(Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("Orders/{Id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetOrderByID(int orderId)
+        {
+            if (orderId <= 0) return BadRequest("OrderID must be greater than 0");
+
+            try
+            {
+                var result = _customerService.GetOrderByID(orderId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("{Id:int}/Orders")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetOrdersByCustomerID(int Id)
+        {
+            if (Id <= 0) return BadRequest("customerId must be greater than 0");
+
+            try
+            {
+                var result = _customerService.GetOrdersByCustomerID(Id);
                 return Ok(result);
             }
             catch (Exception ex)
